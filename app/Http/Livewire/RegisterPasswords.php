@@ -14,6 +14,8 @@ class RegisterPasswords extends Component
 
     public int $strengthScore = 0;
 
+    //Because we only have an integer value of the score,
+    //we will add a public property as array of which score value corresponds to which strength in words.
     public array $strengthLevels = [
         1 => 'Weak',
         2 => 'Fair',
@@ -23,6 +25,7 @@ class RegisterPasswords extends Component
 
     public function updatedPassword($value): void
     {
+        //To determine strength we will use bjeavons/zxcvbn-php package.
         $this->strengthScore = (new Zxcvbn())->passwordStrength($value)['score'];
     }
 

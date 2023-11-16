@@ -25,7 +25,7 @@ class CategoriesList extends Component
 
     public int $currentPage = 1;
 
-	public int $perPage = 10;
+    public int $perPage = 10;
 
     protected $listeners = ['delete'];
 
@@ -63,9 +63,10 @@ class CategoriesList extends Component
 
     public function toggleIsActive($categoryId)
     {
-        Category::where('id', $categoryId)->update([
-            'is_active' => $this->active[$categoryId],
-        ]);
+        Category::where('id', $categoryId)
+            ->update(
+                ['is_active' => $this->active[$categoryId]]
+            );
     }
 
     public function updateOrder($list)
@@ -90,10 +91,10 @@ class CategoriesList extends Component
     public function deleteConfirm($method, $id = null)
     {
         $this->dispatchBrowserEvent('swal:confirm', [
-            'type'   => 'warning',
-            'title'  => 'Are you sure?',
-            'text'   => '',
-            'id'     => $id,
+            'type' => 'warning',
+            'title' => 'Are you sure?',
+            'text' => '',
+            'id' => $id,
             'method' => $method,
         ]);
     }
@@ -105,18 +106,18 @@ class CategoriesList extends Component
 
     public function render(): View
     {
-        $cats = Category::orderBy('position')->paginate($this->perPage);
-        $links = $cats->links();
-        $this->currentPage = $cats->currentPage();
-        $this->categories = collect($cats->items());
+        $categories = Category::orderBy('position')->paginate($this->perPage);
+        $links = $categories->links();
+        $this->currentPage = $categories->currentPage();
+        $this->categories = collect($categories->items());
 
+        //Categories migration we have a column is_active, so we will change its value in the database.
+        //Next, we need a list of active categories. For this, we will use a Collections method mapWithKeys().
         $this->active = $this->categories->mapWithKeys(
-            fn (Category $item) => [$item['id'] => (bool) $item['is_active']]
+            fn(Category $item) => [$item['id'] => (bool)$item['is_active']]
         )->toArray();
 
-        return view('livewire.categories-list', [
-            'links' => $links,
-        ]);
+        return view('livewire.categories-list', ['links' => $links,]);
     }
 
     protected function rules(): array

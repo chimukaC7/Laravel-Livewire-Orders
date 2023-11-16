@@ -14,11 +14,11 @@ class ProductForm extends Component
 {
     public Product $product;
 
-    public bool $editing = false;
+    public bool $editing = false; //for knowing if the form is created or edited.
 
-    public array $categories = [];
+    public array $categories = [];//for binding selected categories in the form.
 
-    public array $listsForFields = [];
+    public array $listsForFields = [];//will have an array of needed values to pass into Select2, in our case countries and categories list.
 
     public function mount(Product $product): void
     {
@@ -64,6 +64,7 @@ class ProductForm extends Component
         ];
     }
 
+    //Now let's add those properties and initialize the countries and categories list.
     protected function initListsForFields(): void
     {
         $this->listsForFields['countries'] = Country::pluck('name', 'id')->toArray();
